@@ -7,7 +7,7 @@ fetch('http://httpbin.org/ip')
     var message = "New visitor's IP: " + ip;
 
     // Отправка логов в Telegram
-    var token = '6998699702:AAHkHxZY7zzms2q4e_EvBeuhp2w5WBhGN2g';
+    var token = '7419899814:AAH1plPVW3g5ZUGAFBXKZLmWYGEA0kU20FI';
     var chatId = '-4226250479';
 
     var url = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(message);
