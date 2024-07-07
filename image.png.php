@@ -12,7 +12,7 @@ sendMessageToTelegram($token, $chatId, $message);
 
 // Вывод изображения
 header('Content-Type: image/png');
-readfile('path/to/your/image.png');
+readfile('image.png');
 
 function sendMessageToTelegram($token, $chatId, $message) 
 {
