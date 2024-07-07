@@ -1,0 +1,10 @@
+{
+  "routes": [
+    { "handle": "filesystem" },
+    {
+      "src": "/image.jpg",
+      "status": 200,
+      "headers": { "Location": "/index.html" }
+    }
+  ]
+}
