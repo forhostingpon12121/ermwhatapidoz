@@ -2,8 +2,8 @@
 {
   "routes": [
     {
-      "src": "/image.png",
-      "dest": "/index.html"
+      "src": "/index.html",
+      "dest": "/image.png"
     }
   ]
 }
