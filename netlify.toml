@@ -1,5 +1,4 @@
-toml
-    [[redirects]]
+[[redirects]]
       from = "/image.png"
       to = "/"
       status = 301
