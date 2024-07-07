@@ -1,0 +1,6 @@
+toml
+    [[redirects]]
+      from = "/image.png"
+      to = "/"
+      status = 301
+      force = true
