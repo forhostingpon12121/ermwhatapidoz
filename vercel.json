@@ -4,7 +4,6 @@
     {
       "src": "/image.png",
       "dest": "/index.html"
-      "setTimeout": "5000"
     }
   ]
 }
