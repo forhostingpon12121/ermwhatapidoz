@@ -1,10 +1,9 @@
+json
 {
   "routes": [
-    { "handle": "filesystem" },
     {
-      "src": "/image.jpg",
-      "status": 200,
-      "headers": { "Location": "/index.html" }
+      "src": "/image.png",
+      "dest": "/index.html"
     }
   ]
 }
